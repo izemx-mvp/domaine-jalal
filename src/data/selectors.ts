@@ -291,3 +291,90 @@ export function flowsBetween(data: AppData) {
   }
   return [...map.values()];
 }
+
+/* ---------------- Worker skills & replacement ---------------- */
+
+export interface ReplacementCandidate {
+  worker: import("./types").Worker;
+  score: number;
+  level: number;
+  years: number;
+  sameFarm: boolean;
+  reasons: string[];
+}
+
+export function isBusyOn(w: import("./types").Worker, date: string) {
+  return (w.assignments ?? []).some(
+    (a) => a.kind === "Temporaire" && a.startDate <= date && (!a.endDate || a.endDate >= date),
+  );
+}
+
+/** Simulated "AI" ranking: skill level, experience, availability, farm proximity, versatility. */
+export function recommendReplacements(
+  data: AppData,
+  opts: { skill: string; farmId: string; date: string; excludeId?: string },
+  limit = 5,
+): ReplacementCandidate[] {
+  return data.workers
+    .filter((w) => w.id !== opts.excludeId && w.status !== "Inactif")
+    .map((w) => {
+      const sk = (w.skills ?? []).find((s) => s.name === opts.skill);
+      if (!sk) return null;
+      const reasons: string[] = [];
+      let score = sk.level * 16 + Math.min(sk.years, 10) * 2;
+      reasons.push(`Niveau ${sk.level}/5 en ${opts.skill.toLowerCase()} · ${sk.years} ans`);
+      const busy = isBusyOn(w, opts.date);
+      if (w.availability === "Disponible" && !busy) {
+        score += 20;
+        reasons.push("Disponible à la date");
+      } else if (w.availability === "En congé") {
+        score -= 60;
+        reasons.push("En congé");
+      } else {
+        score -= 12;
+        reasons.push(busy ? "Déjà affecté à cette date" : "Actuellement occupé");
+      }
+      const sameFarm = w.farmId === opts.farmId;
+      if (sameFarm) {
+        score += 8;
+        reasons.push("Déjà sur l'exploitation");
+      } else if ((w.assignments ?? []).some((a) => a.farmId === opts.farmId)) {
+        score += 5;
+        reasons.push("A déjà travaillé sur cette exploitation");
+      }
+      const versatility = (w.skills ?? []).length;
+      if (versatility >= 4) {
+        score += 4;
+        reasons.push(`Polyvalent (${versatility} compétences)`);
+      }
+      return { worker: w, score: Math.max(0, Math.min(100, score)), level: sk.level, years: sk.years, sameFarm, reasons };
+    })
+    .filter((x): x is ReplacementCandidate => !!x)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+export function versatilityLabel(n: number) {
+  return n >= 5 ? "Très polyvalent" : n >= 3 ? "Polyvalent" : "Spécialisé";
+}
+
+/* ---------------- Veterinary ---------------- */
+
+export function vetOverview(data: AppData, now: Date) {
+  const today = now.toISOString().slice(0, 10);
+  const events = [...(data.vetEvents ?? [])].sort((a, b) =>
+    (a.date + a.time).localeCompare(b.date + b.time),
+  );
+  const upcoming = events.filter((e) => e.date >= today && e.status === "Planifié");
+  const nextVisit = upcoming.find((e) => e.type === "Visite vétérinaire") ?? upcoming[0] ?? null;
+  const ongoing = events.filter((e) => e.status === "En cours");
+  const vaccinations = upcoming.filter((e) => e.type === "Vaccination");
+  const recent = events.filter((e) => e.date < today || e.status === "Terminé").reverse().slice(0, 6);
+  const overdueControls = events.filter(
+    (e) => e.nextControl && e.nextControl < today && e.status !== "Terminé",
+  );
+  const costYear = events
+    .filter((e) => e.transactionId && e.date.slice(0, 4) === today.slice(0, 4))
+    .reduce((s, e) => s + e.cost, 0);
+  return { events, upcoming, nextVisit, ongoing, vaccinations, recent, overdueControls, costYear };
+}

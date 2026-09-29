@@ -20,6 +20,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 
 import { LogoLockup, LogoMark } from "@/components/brand/logo";
+import { AssistantFab } from "@/components/assistant/assistant-fab";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { FieldLines } from "@/components/layout/field-lines";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -416,6 +417,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+        <AssistantFab />
       </div>
     </TooltipProvider>
   );

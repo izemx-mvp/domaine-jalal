@@ -9,11 +9,14 @@ import {
 } from "react";
 
 import { buildSeedData } from "@/data/seed";
+import { upgradeData } from "@/data/seed-extras";
 import {
   DEMO_NOW,
   type ActivityItem,
   type AppData,
   type AppSettings,
+  type Assignment,
+  type VetEvent,
   type Client,
   type DocumentItem,
   type Flow,
@@ -75,6 +78,11 @@ interface Store {
   markAllNotificationsRead: () => void;
 
   updateSettings: (patch: Partial<AppSettings>) => void;
+
+  assignWorker: (workerId: string, a: Omit<Assignment, "id">) => void;
+  addVetEvent: (e: Omit<VetEvent, "id" | "transactionId" | "documentId">, documentName?: string) => void;
+  updateVetEvent: (id: string, patch: Partial<VetEvent>) => void;
+  deleteVetEvent: (id: string) => void;
 }
 
 const AppStoreContext = createContext<Store | null>(null);
@@ -91,7 +99,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as AppData;
-        if (parsed?.transactions?.length) setData(parsed);
+        if (parsed?.transactions?.length) setData(upgradeData(parsed));
       }
       setAuthed(localStorage.getItem(SESSION_KEY) === "1");
     } catch {
@@ -258,6 +266,102 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
       updateSettings: (patch) =>
         setData((d) => ({ ...d, settings: { ...d.settings, ...patch } })),
+
+      assignWorker: (workerId, a) => {
+        const w = data.workers.find((x) => x.id === workerId);
+        setData((d) => ({
+          ...d,
+          workers: d.workers.map((x) =>
+            x.id === workerId
+              ? {
+                  ...x,
+                  availability: a.kind === "Temporaire" ? "Affecté temporairement" : x.availability,
+                  assignments: [{ ...a, id: uid("as") }, ...(x.assignments ?? [])],
+                }
+              : x,
+          ),
+        }));
+        pushActivity({
+          label: "Affectation temporaire",
+          entity: `${w?.name ?? ""} → ${data.farms.find((f) => f.id === a.farmId)?.name ?? ""} · ${a.task}`,
+          kind: "flow",
+        });
+      },
+
+      addVetEvent: (e, documentName) => {
+        const id = uid("vet");
+        let transactionId: string | null = null;
+        let documentId: string | null = null;
+        const iso = new Date(`${e.date}T${e.time || "09:00"}:00`).toISOString();
+        const reference = `TRX-${e.date.slice(0, 4)}-V${String((data.vetEvents?.length ?? 0) + 1).padStart(3, "0")}`;
+        const newTx: Transaction[] = [];
+        const newDocs: DocumentItem[] = [];
+        if (e.cost > 0) {
+          transactionId = uid("t");
+          newTx.push({
+            id: transactionId,
+            reference,
+            date: iso,
+            farmId: "f-bovin",
+            type: "Dépense",
+            category: "Vétérinaire",
+            partyKind: "none",
+            partyId: null,
+            amount: e.cost,
+            method: "Virement bancaire",
+            description: `${e.type} — ${e.reason} (${e.vet})`,
+            source: "Manuel",
+            payments: [],
+          });
+        }
+        if (documentName?.trim()) {
+          documentId = uid("d");
+          newDocs.push({
+            id: documentId,
+            name: documentName.trim(),
+            category: "Vétérinaire",
+            farmId: "f-bovin",
+            entity: e.vet,
+            transactionRef: transactionId ? reference : null,
+            date: iso,
+            sizeKb: 240,
+            status: "En attente",
+          });
+          if (newTx[0]) newTx[0].documentId = documentId;
+        }
+        setData((d) => ({
+          ...d,
+          vetEvents: [...(d.vetEvents ?? []), { ...e, id, transactionId, documentId }],
+          transactions: [...newTx, ...d.transactions],
+          documents: [...newDocs, ...d.documents],
+        }));
+        pushActivity({ label: "Intervention vétérinaire", entity: `${e.type} · ${e.lot}`, kind: "expense" });
+      },
+      updateVetEvent: (id, patch) =>
+        setData((d) => {
+          const ev = (d.vetEvents ?? []).find((x) => x.id === id);
+          return {
+            ...d,
+            vetEvents: patchList(d.vetEvents ?? [], id, patch),
+            transactions:
+              ev?.transactionId && patch.cost !== undefined
+                ? d.transactions.map((t) =>
+                    t.id === ev.transactionId ? { ...t, amount: patch.cost as number } : t,
+                  )
+                : d.transactions,
+          };
+        }),
+      deleteVetEvent: (id) =>
+        setData((d) => {
+          const ev = (d.vetEvents ?? []).find((x) => x.id === id);
+          return {
+            ...d,
+            vetEvents: (d.vetEvents ?? []).filter((x) => x.id !== id),
+            transactions: ev?.transactionId
+              ? d.transactions.map((t) => (t.id === ev.transactionId ? { ...t, cancelled: true } : t))
+              : d.transactions,
+          };
+        }),
     };
   }, [data, ready, authed, farmScope, period, pushActivity]);
 

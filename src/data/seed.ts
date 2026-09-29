@@ -15,6 +15,7 @@ import {
   type TransactionType,
   type Worker,
 } from "./types";
+import { buildVetSeed, enrichWorkers } from "./seed-extras";
 
 function makeRng(seed: number) {
   let s = seed >>> 0;
@@ -571,14 +572,16 @@ const activity: ActivityItem[] = [
 ].sort((a, b) => b.date.localeCompare(a.date));
 
 export function buildSeedData(): AppData {
+  const vet = buildVetSeed();
   return {
     farms: FARMS,
     suppliers,
-    workers,
+    workers: enrichWorkers(workers),
     clients,
-    transactions,
+    transactions: [...vet.transactions, ...transactions],
     flows,
-    documents,
+    documents: [...vet.documents, ...documents],
+    vetEvents: vet.vetEvents,
     notifications,
     activity,
     settings: {

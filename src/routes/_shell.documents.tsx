@@ -69,6 +69,7 @@ const CATEGORIES: DocumentItem["category"][] = [
   "Photos",
   "Justificatifs",
   "Documents fournisseurs",
+  "Vétérinaire",
 ];
 
 const ALL = "__all__";
