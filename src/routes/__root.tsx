@@ -10,9 +10,9 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { Toaster } from "../components/ui/sonner";
-import { AppStoreProvider } from "../store/app-store";
+import { reportLovableError } from "@/lib/lovable-error-reporting";
+import { Toaster } from "@/components/ui/sonner";
+import { AppStoreProvider } from "@/store/app-store";
 
 function NotFoundComponent() {
   return (
