@@ -13,8 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as ShellDashboardRouteImport } from './routes/_shell.dashboard'
+import { Route as ShellFinanceRouteImport } from './routes/_shell.finance'
 import { Route as ShellTransactionsRouteImport } from './routes/_shell.transactions'
 import { Route as ShellExploitationsIndexRouteImport } from './routes/_shell.exploitations.index'
+import { Route as ShellExploitationsSlugRouteImport } from './routes/_shell.exploitations.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,6 +37,11 @@ const ShellDashboardRoute = ShellDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellFinanceRoute = ShellFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellTransactionsRoute = ShellTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
@@ -45,19 +52,28 @@ const ShellExploitationsIndexRoute = ShellExploitationsIndexRouteImport.update({
   path: '/exploitations/',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellExploitationsSlugRoute = ShellExploitationsSlugRouteImport.update({
+  id: '/exploitations/$slug',
+  path: '/exploitations/$slug',
+  getParentRoute: () => ShellRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof ShellDashboardRoute
+  '/finance': typeof ShellFinanceRoute
   '/transactions': typeof ShellTransactionsRoute
+  '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations/': typeof ShellExploitationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof ShellDashboardRoute
+  '/finance': typeof ShellFinanceRoute
   '/transactions': typeof ShellTransactionsRoute
+  '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations': typeof ShellExploitationsIndexRoute
 }
 export interface FileRoutesById {
@@ -66,22 +82,39 @@ export interface FileRoutesById {
   '/_shell': typeof ShellRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/_shell/dashboard': typeof ShellDashboardRoute
+  '/_shell/finance': typeof ShellFinanceRoute
   '/_shell/transactions': typeof ShellTransactionsRoute
+  '/_shell/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/_shell/exploitations/': typeof ShellExploitationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/connexion' | '/dashboard' | '/transactions' | '/exploitations/'
+    | '/'
+    | '/connexion'
+    | '/dashboard'
+    | '/finance'
+    | '/transactions'
+    | '/exploitations/$slug'
+    | '/exploitations/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/connexion' | '/dashboard' | '/transactions' | '/exploitations'
+  to:
+    | '/'
+    | '/connexion'
+    | '/dashboard'
+    | '/finance'
+    | '/transactions'
+    | '/exploitations/$slug'
+    | '/exploitations'
   id:
     | '__root__'
     | '/'
     | '/_shell'
     | '/connexion'
     | '/_shell/dashboard'
+    | '/_shell/finance'
     | '/_shell/transactions'
+    | '/_shell/exploitations/$slug'
     | '/_shell/exploitations/'
   fileRoutesById: FileRoutesById
 }
@@ -121,6 +154,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellDashboardRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/finance': {
+      id: '/_shell/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof ShellFinanceRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/transactions': {
       id: '/_shell/transactions'
       path: '/transactions'
@@ -135,18 +175,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellExploitationsIndexRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/exploitations/$slug': {
+      id: '/_shell/exploitations/$slug'
+      path: '/exploitations/$slug'
+      fullPath: '/exploitations/$slug'
+      preLoaderRoute: typeof ShellExploitationsSlugRouteImport
+      parentRoute: typeof ShellRoute
+    }
   }
 }
 
 interface ShellRouteChildren {
   ShellDashboardRoute: typeof ShellDashboardRoute
+  ShellFinanceRoute: typeof ShellFinanceRoute
   ShellTransactionsRoute: typeof ShellTransactionsRoute
+  ShellExploitationsSlugRoute: typeof ShellExploitationsSlugRoute
   ShellExploitationsIndexRoute: typeof ShellExploitationsIndexRoute
 }
 
 const ShellRouteChildren: ShellRouteChildren = {
   ShellDashboardRoute: ShellDashboardRoute,
+  ShellFinanceRoute: ShellFinanceRoute,
   ShellTransactionsRoute: ShellTransactionsRoute,
+  ShellExploitationsSlugRoute: ShellExploitationsSlugRoute,
   ShellExploitationsIndexRoute: ShellExploitationsIndexRoute,
 }
 
