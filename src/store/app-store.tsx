@@ -85,7 +85,11 @@ interface Store {
   deleteVetEvent: (id: string) => void;
 }
 
-const AppStoreContext = createContext<Store | null>(null);
+// Keep a single context instance across hot reloads so a re-evaluated module
+// never ends up with a provider/consumer mismatch.
+const CTX_KEY = "__domaineJalalStoreContext";
+const g = globalThis as unknown as Record<string, React.Context<Store | null> | undefined>;
+const AppStoreContext: React.Context<Store | null> = g[CTX_KEY] ?? (g[CTX_KEY] = createContext<Store | null>(null));
 
 export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(() => buildSeedData());
