@@ -159,10 +159,10 @@ function DashboardPage() {
         />
         <KpiCard
           label="Reste à payer"
-          value={t.toPay}
+          value={outstanding.toPay}
           icon={AlertTriangle}
           tone="critical"
-          comparison="Toutes exploitations confondues"
+          comparison="Encours global, toutes périodes"
         />
         <KpiCard
           label="Transactions"
