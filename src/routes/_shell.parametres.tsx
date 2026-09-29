@@ -47,7 +47,7 @@ type NotifKey =
   | "internalFlows"
   | "weeklyDigest";
 
-const NOTIFS: { key: keyof ReturnType<typeof notifKeys>; label: string; detail: string }[] = [
+const NOTIFS: { key: NotifKey; label: string; detail: string }[] = [
   { key: "supplierDebt", label: "Dettes fournisseurs", detail: "Alerte quand une facture reste impayée" },
   { key: "missingDocuments", label: "Justificatifs manquants", detail: "Transactions sans document rattaché" },
   { key: "budgetAlerts", label: "Dépassements de budget", detail: "Quand une exploitation dépasse son budget" },
