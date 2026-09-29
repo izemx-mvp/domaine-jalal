@@ -310,7 +310,16 @@ function WorkersPage() {
       <TransactionDialog
         open={!!advanceFor}
         onOpenChange={(v) => !v && setAdvanceFor(null)}
-        defaults={advanceFor ? { type: "Avance", farmId: advanceFor.farmId, category: "Main-d'œuvre" } : undefined}
+        defaults={
+          advanceFor
+            ? {
+                type: "Avance",
+                farmId: advanceFor.farmId,
+                category: "Main-d'œuvre",
+                partyId: advanceFor.id,
+              }
+            : undefined
+        }
       />
 
       <Sheet open={!!detail} onOpenChange={(v) => !v && setDetail(null)}>
