@@ -35,12 +35,7 @@ export function CommandPalette({
   };
 
   return (
-    <CommandDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Recherche globale"
-      description="Rechercher une transaction, un fournisseur, un ouvrier, un client..."
-    >
+    <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput placeholder="Rechercher une transaction, un fournisseur, un ouvrier, un client..." />
       <CommandList>
         <CommandEmpty>Aucun résultat trouvé.</CommandEmpty>
