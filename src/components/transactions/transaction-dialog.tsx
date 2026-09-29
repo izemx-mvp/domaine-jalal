@@ -94,7 +94,7 @@ export function TransactionDialog({
       setType((defaults?.type as TransactionType) ?? "Achat");
       setFarmId(defaults?.farmId ?? data.farms[0].id);
       setCategory(defaults?.category ?? "Gasoil");
-      setPartyId("");
+      setPartyId(defaults?.partyId ?? "");
       setAmount("");
       setPaid("");
       setDate(new Date().toISOString().slice(0, 10));
