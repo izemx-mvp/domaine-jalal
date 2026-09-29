@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as ShellClientsRouteImport } from './routes/_shell.clients'
 import { Route as ShellDashboardRouteImport } from './routes/_shell.dashboard'
 import { Route as ShellFinanceRouteImport } from './routes/_shell.finance'
 import { Route as ShellFournisseursRouteImport } from './routes/_shell.fournisseurs'
+import { Route as ShellOuvriersRouteImport } from './routes/_shell.ouvriers'
 import { Route as ShellTransactionsRouteImport } from './routes/_shell.transactions'
 import { Route as ShellExploitationsIndexRouteImport } from './routes/_shell.exploitations.index'
 import { Route as ShellExploitationsSlugRouteImport } from './routes/_shell.exploitations.$slug'
@@ -33,6 +35,11 @@ const ConnexionRoute = ConnexionRouteImport.update({
   path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShellClientsRoute = ShellClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellDashboardRoute = ShellDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -46,6 +53,11 @@ const ShellFinanceRoute = ShellFinanceRouteImport.update({
 const ShellFournisseursRoute = ShellFournisseursRouteImport.update({
   id: '/fournisseurs',
   path: '/fournisseurs',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellOuvriersRoute = ShellOuvriersRouteImport.update({
+  id: '/ouvriers',
+  path: '/ouvriers',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellTransactionsRoute = ShellTransactionsRouteImport.update({
@@ -67,9 +79,11 @@ const ShellExploitationsSlugRoute = ShellExploitationsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
+  '/clients': typeof ShellClientsRoute
   '/dashboard': typeof ShellDashboardRoute
   '/finance': typeof ShellFinanceRoute
   '/fournisseurs': typeof ShellFournisseursRoute
+  '/ouvriers': typeof ShellOuvriersRoute
   '/transactions': typeof ShellTransactionsRoute
   '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations/': typeof ShellExploitationsIndexRoute
@@ -77,9 +91,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
+  '/clients': typeof ShellClientsRoute
   '/dashboard': typeof ShellDashboardRoute
   '/finance': typeof ShellFinanceRoute
   '/fournisseurs': typeof ShellFournisseursRoute
+  '/ouvriers': typeof ShellOuvriersRoute
   '/transactions': typeof ShellTransactionsRoute
   '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations': typeof ShellExploitationsIndexRoute
@@ -89,9 +105,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_shell': typeof ShellRouteWithChildren
   '/connexion': typeof ConnexionRoute
+  '/_shell/clients': typeof ShellClientsRoute
   '/_shell/dashboard': typeof ShellDashboardRoute
   '/_shell/finance': typeof ShellFinanceRoute
   '/_shell/fournisseurs': typeof ShellFournisseursRoute
+  '/_shell/ouvriers': typeof ShellOuvriersRoute
   '/_shell/transactions': typeof ShellTransactionsRoute
   '/_shell/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/_shell/exploitations/': typeof ShellExploitationsIndexRoute
@@ -101,9 +119,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/connexion'
+    | '/clients'
     | '/dashboard'
     | '/finance'
     | '/fournisseurs'
+    | '/ouvriers'
     | '/transactions'
     | '/exploitations/$slug'
     | '/exploitations/'
@@ -111,9 +131,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/connexion'
+    | '/clients'
     | '/dashboard'
     | '/finance'
     | '/fournisseurs'
+    | '/ouvriers'
     | '/transactions'
     | '/exploitations/$slug'
     | '/exploitations'
@@ -122,9 +144,11 @@ export interface FileRouteTypes {
     | '/'
     | '/_shell'
     | '/connexion'
+    | '/_shell/clients'
     | '/_shell/dashboard'
     | '/_shell/finance'
     | '/_shell/fournisseurs'
+    | '/_shell/ouvriers'
     | '/_shell/transactions'
     | '/_shell/exploitations/$slug'
     | '/_shell/exploitations/'
@@ -159,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_shell/clients': {
+      id: '/_shell/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof ShellClientsRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/dashboard': {
       id: '/_shell/dashboard'
       path: '/dashboard'
@@ -178,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/fournisseurs'
       fullPath: '/fournisseurs'
       preLoaderRoute: typeof ShellFournisseursRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/ouvriers': {
+      id: '/_shell/ouvriers'
+      path: '/ouvriers'
+      fullPath: '/ouvriers'
+      preLoaderRoute: typeof ShellOuvriersRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/transactions': {
@@ -205,18 +243,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface ShellRouteChildren {
+  ShellClientsRoute: typeof ShellClientsRoute
   ShellDashboardRoute: typeof ShellDashboardRoute
   ShellFinanceRoute: typeof ShellFinanceRoute
   ShellFournisseursRoute: typeof ShellFournisseursRoute
+  ShellOuvriersRoute: typeof ShellOuvriersRoute
   ShellTransactionsRoute: typeof ShellTransactionsRoute
   ShellExploitationsSlugRoute: typeof ShellExploitationsSlugRoute
   ShellExploitationsIndexRoute: typeof ShellExploitationsIndexRoute
 }
 
 const ShellRouteChildren: ShellRouteChildren = {
+  ShellClientsRoute: ShellClientsRoute,
   ShellDashboardRoute: ShellDashboardRoute,
   ShellFinanceRoute: ShellFinanceRoute,
   ShellFournisseursRoute: ShellFournisseursRoute,
+  ShellOuvriersRoute: ShellOuvriersRoute,
   ShellTransactionsRoute: ShellTransactionsRoute,
   ShellExploitationsSlugRoute: ShellExploitationsSlugRoute,
   ShellExploitationsIndexRoute: ShellExploitationsIndexRoute,
