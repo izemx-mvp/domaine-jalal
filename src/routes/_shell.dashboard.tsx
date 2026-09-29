@@ -137,11 +137,11 @@ function DashboardPage() {
         />
         <KpiCard
           label="Dettes fournisseurs"
-          value={t.supplierDebt}
+          value={outstanding.supplierDebt}
           icon={Wallet}
           tone="warning"
-          comparison="Montants restant à régler"
-          tooltip="Somme des restes à payer sur les factures fournisseurs."
+          comparison="Encours total à régler"
+          tooltip="Somme des restes à payer sur les factures fournisseurs, toutes périodes confondues."
         />
         <KpiCard
           label="Encaissements clients"
