@@ -10,33 +10,178 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as ShellClientsRouteImport } from './routes/_shell.clients'
+import { Route as ShellDashboardRouteImport } from './routes/_shell.dashboard'
+import { Route as ShellDocumentsRouteImport } from './routes/_shell.documents'
+import { Route as ShellFinanceRouteImport } from './routes/_shell.finance'
+import { Route as ShellFluxInternesRouteImport } from './routes/_shell.flux-internes'
+import { Route as ShellFournisseursRouteImport } from './routes/_shell.fournisseurs'
+import { Route as ShellOuvriersRouteImport } from './routes/_shell.ouvriers'
+import { Route as ShellTransactionsRouteImport } from './routes/_shell.transactions'
+import { Route as ShellExploitationsIndexRouteImport } from './routes/_shell.exploitations.index'
+import { Route as ShellExploitationsSlugRouteImport } from './routes/_shell.exploitations.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShellRoute = ShellRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellClientsRoute = ShellClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellDashboardRoute = ShellDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellDocumentsRoute = ShellDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellFinanceRoute = ShellFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellFluxInternesRoute = ShellFluxInternesRouteImport.update({
+  id: '/flux-internes',
+  path: '/flux-internes',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellFournisseursRoute = ShellFournisseursRouteImport.update({
+  id: '/fournisseurs',
+  path: '/fournisseurs',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellOuvriersRoute = ShellOuvriersRouteImport.update({
+  id: '/ouvriers',
+  path: '/ouvriers',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellTransactionsRoute = ShellTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellExploitationsIndexRoute = ShellExploitationsIndexRouteImport.update({
+  id: '/exploitations/',
+  path: '/exploitations/',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellExploitationsSlugRoute = ShellExploitationsSlugRouteImport.update({
+  id: '/exploitations/$slug',
+  path: '/exploitations/$slug',
+  getParentRoute: () => ShellRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/clients': typeof ShellClientsRoute
+  '/dashboard': typeof ShellDashboardRoute
+  '/documents': typeof ShellDocumentsRoute
+  '/finance': typeof ShellFinanceRoute
+  '/flux-internes': typeof ShellFluxInternesRoute
+  '/fournisseurs': typeof ShellFournisseursRoute
+  '/ouvriers': typeof ShellOuvriersRoute
+  '/transactions': typeof ShellTransactionsRoute
+  '/exploitations/$slug': typeof ShellExploitationsSlugRoute
+  '/exploitations/': typeof ShellExploitationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/clients': typeof ShellClientsRoute
+  '/dashboard': typeof ShellDashboardRoute
+  '/documents': typeof ShellDocumentsRoute
+  '/finance': typeof ShellFinanceRoute
+  '/flux-internes': typeof ShellFluxInternesRoute
+  '/fournisseurs': typeof ShellFournisseursRoute
+  '/ouvriers': typeof ShellOuvriersRoute
+  '/transactions': typeof ShellTransactionsRoute
+  '/exploitations/$slug': typeof ShellExploitationsSlugRoute
+  '/exploitations': typeof ShellExploitationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_shell': typeof ShellRouteWithChildren
+  '/connexion': typeof ConnexionRoute
+  '/_shell/clients': typeof ShellClientsRoute
+  '/_shell/dashboard': typeof ShellDashboardRoute
+  '/_shell/documents': typeof ShellDocumentsRoute
+  '/_shell/finance': typeof ShellFinanceRoute
+  '/_shell/flux-internes': typeof ShellFluxInternesRoute
+  '/_shell/fournisseurs': typeof ShellFournisseursRoute
+  '/_shell/ouvriers': typeof ShellOuvriersRoute
+  '/_shell/transactions': typeof ShellTransactionsRoute
+  '/_shell/exploitations/$slug': typeof ShellExploitationsSlugRoute
+  '/_shell/exploitations/': typeof ShellExploitationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/connexion'
+    | '/clients'
+    | '/dashboard'
+    | '/documents'
+    | '/finance'
+    | '/flux-internes'
+    | '/fournisseurs'
+    | '/ouvriers'
+    | '/transactions'
+    | '/exploitations/$slug'
+    | '/exploitations/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/connexion'
+    | '/clients'
+    | '/dashboard'
+    | '/documents'
+    | '/finance'
+    | '/flux-internes'
+    | '/fournisseurs'
+    | '/ouvriers'
+    | '/transactions'
+    | '/exploitations/$slug'
+    | '/exploitations'
+  id:
+    | '__root__'
+    | '/'
+    | '/_shell'
+    | '/connexion'
+    | '/_shell/clients'
+    | '/_shell/dashboard'
+    | '/_shell/documents'
+    | '/_shell/finance'
+    | '/_shell/flux-internes'
+    | '/_shell/fournisseurs'
+    | '/_shell/ouvriers'
+    | '/_shell/transactions'
+    | '/_shell/exploitations/$slug'
+    | '/_shell/exploitations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ShellRoute: typeof ShellRouteWithChildren
+  ConnexionRoute: typeof ConnexionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +193,125 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/clients': {
+      id: '/_shell/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof ShellClientsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/dashboard': {
+      id: '/_shell/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ShellDashboardRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/documents': {
+      id: '/_shell/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof ShellDocumentsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/finance': {
+      id: '/_shell/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof ShellFinanceRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/flux-internes': {
+      id: '/_shell/flux-internes'
+      path: '/flux-internes'
+      fullPath: '/flux-internes'
+      preLoaderRoute: typeof ShellFluxInternesRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/fournisseurs': {
+      id: '/_shell/fournisseurs'
+      path: '/fournisseurs'
+      fullPath: '/fournisseurs'
+      preLoaderRoute: typeof ShellFournisseursRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/ouvriers': {
+      id: '/_shell/ouvriers'
+      path: '/ouvriers'
+      fullPath: '/ouvriers'
+      preLoaderRoute: typeof ShellOuvriersRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/transactions': {
+      id: '/_shell/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof ShellTransactionsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/exploitations/': {
+      id: '/_shell/exploitations/'
+      path: '/exploitations'
+      fullPath: '/exploitations/'
+      preLoaderRoute: typeof ShellExploitationsIndexRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/exploitations/$slug': {
+      id: '/_shell/exploitations/$slug'
+      path: '/exploitations/$slug'
+      fullPath: '/exploitations/$slug'
+      preLoaderRoute: typeof ShellExploitationsSlugRouteImport
+      parentRoute: typeof ShellRoute
+    }
   }
 }
 
+interface ShellRouteChildren {
+  ShellClientsRoute: typeof ShellClientsRoute
+  ShellDashboardRoute: typeof ShellDashboardRoute
+  ShellDocumentsRoute: typeof ShellDocumentsRoute
+  ShellFinanceRoute: typeof ShellFinanceRoute
+  ShellFluxInternesRoute: typeof ShellFluxInternesRoute
+  ShellFournisseursRoute: typeof ShellFournisseursRoute
+  ShellOuvriersRoute: typeof ShellOuvriersRoute
+  ShellTransactionsRoute: typeof ShellTransactionsRoute
+  ShellExploitationsSlugRoute: typeof ShellExploitationsSlugRoute
+  ShellExploitationsIndexRoute: typeof ShellExploitationsIndexRoute
+}
+
+const ShellRouteChildren: ShellRouteChildren = {
+  ShellClientsRoute: ShellClientsRoute,
+  ShellDashboardRoute: ShellDashboardRoute,
+  ShellDocumentsRoute: ShellDocumentsRoute,
+  ShellFinanceRoute: ShellFinanceRoute,
+  ShellFluxInternesRoute: ShellFluxInternesRoute,
+  ShellFournisseursRoute: ShellFournisseursRoute,
+  ShellOuvriersRoute: ShellOuvriersRoute,
+  ShellTransactionsRoute: ShellTransactionsRoute,
+  ShellExploitationsSlugRoute: ShellExploitationsSlugRoute,
+  ShellExploitationsIndexRoute: ShellExploitationsIndexRoute,
+}
+
+const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ShellRoute: ShellRouteWithChildren,
+  ConnexionRoute: ConnexionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
