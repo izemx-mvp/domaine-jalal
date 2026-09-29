@@ -14,7 +14,9 @@ import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as ShellClientsRouteImport } from './routes/_shell.clients'
 import { Route as ShellDashboardRouteImport } from './routes/_shell.dashboard'
+import { Route as ShellDocumentsRouteImport } from './routes/_shell.documents'
 import { Route as ShellFinanceRouteImport } from './routes/_shell.finance'
+import { Route as ShellFluxInternesRouteImport } from './routes/_shell.flux-internes'
 import { Route as ShellFournisseursRouteImport } from './routes/_shell.fournisseurs'
 import { Route as ShellOuvriersRouteImport } from './routes/_shell.ouvriers'
 import { Route as ShellTransactionsRouteImport } from './routes/_shell.transactions'
@@ -45,9 +47,19 @@ const ShellDashboardRoute = ShellDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellDocumentsRoute = ShellDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellFinanceRoute = ShellFinanceRouteImport.update({
   id: '/finance',
   path: '/finance',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellFluxInternesRoute = ShellFluxInternesRouteImport.update({
+  id: '/flux-internes',
+  path: '/flux-internes',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellFournisseursRoute = ShellFournisseursRouteImport.update({
@@ -81,7 +93,9 @@ export interface FileRoutesByFullPath {
   '/connexion': typeof ConnexionRoute
   '/clients': typeof ShellClientsRoute
   '/dashboard': typeof ShellDashboardRoute
+  '/documents': typeof ShellDocumentsRoute
   '/finance': typeof ShellFinanceRoute
+  '/flux-internes': typeof ShellFluxInternesRoute
   '/fournisseurs': typeof ShellFournisseursRoute
   '/ouvriers': typeof ShellOuvriersRoute
   '/transactions': typeof ShellTransactionsRoute
@@ -93,7 +107,9 @@ export interface FileRoutesByTo {
   '/connexion': typeof ConnexionRoute
   '/clients': typeof ShellClientsRoute
   '/dashboard': typeof ShellDashboardRoute
+  '/documents': typeof ShellDocumentsRoute
   '/finance': typeof ShellFinanceRoute
+  '/flux-internes': typeof ShellFluxInternesRoute
   '/fournisseurs': typeof ShellFournisseursRoute
   '/ouvriers': typeof ShellOuvriersRoute
   '/transactions': typeof ShellTransactionsRoute
@@ -107,7 +123,9 @@ export interface FileRoutesById {
   '/connexion': typeof ConnexionRoute
   '/_shell/clients': typeof ShellClientsRoute
   '/_shell/dashboard': typeof ShellDashboardRoute
+  '/_shell/documents': typeof ShellDocumentsRoute
   '/_shell/finance': typeof ShellFinanceRoute
+  '/_shell/flux-internes': typeof ShellFluxInternesRoute
   '/_shell/fournisseurs': typeof ShellFournisseursRoute
   '/_shell/ouvriers': typeof ShellOuvriersRoute
   '/_shell/transactions': typeof ShellTransactionsRoute
@@ -121,7 +139,9 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/clients'
     | '/dashboard'
+    | '/documents'
     | '/finance'
+    | '/flux-internes'
     | '/fournisseurs'
     | '/ouvriers'
     | '/transactions'
@@ -133,7 +153,9 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/clients'
     | '/dashboard'
+    | '/documents'
     | '/finance'
+    | '/flux-internes'
     | '/fournisseurs'
     | '/ouvriers'
     | '/transactions'
@@ -146,7 +168,9 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/_shell/clients'
     | '/_shell/dashboard'
+    | '/_shell/documents'
     | '/_shell/finance'
+    | '/_shell/flux-internes'
     | '/_shell/fournisseurs'
     | '/_shell/ouvriers'
     | '/_shell/transactions'
@@ -197,11 +221,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellDashboardRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/documents': {
+      id: '/_shell/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof ShellDocumentsRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/finance': {
       id: '/_shell/finance'
       path: '/finance'
       fullPath: '/finance'
       preLoaderRoute: typeof ShellFinanceRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/flux-internes': {
+      id: '/_shell/flux-internes'
+      path: '/flux-internes'
+      fullPath: '/flux-internes'
+      preLoaderRoute: typeof ShellFluxInternesRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/fournisseurs': {
@@ -245,7 +283,9 @@ declare module '@tanstack/react-router' {
 interface ShellRouteChildren {
   ShellClientsRoute: typeof ShellClientsRoute
   ShellDashboardRoute: typeof ShellDashboardRoute
+  ShellDocumentsRoute: typeof ShellDocumentsRoute
   ShellFinanceRoute: typeof ShellFinanceRoute
+  ShellFluxInternesRoute: typeof ShellFluxInternesRoute
   ShellFournisseursRoute: typeof ShellFournisseursRoute
   ShellOuvriersRoute: typeof ShellOuvriersRoute
   ShellTransactionsRoute: typeof ShellTransactionsRoute
@@ -256,7 +296,9 @@ interface ShellRouteChildren {
 const ShellRouteChildren: ShellRouteChildren = {
   ShellClientsRoute: ShellClientsRoute,
   ShellDashboardRoute: ShellDashboardRoute,
+  ShellDocumentsRoute: ShellDocumentsRoute,
   ShellFinanceRoute: ShellFinanceRoute,
+  ShellFluxInternesRoute: ShellFluxInternesRoute,
   ShellFournisseursRoute: ShellFournisseursRoute,
   ShellOuvriersRoute: ShellOuvriersRoute,
   ShellTransactionsRoute: ShellTransactionsRoute,
