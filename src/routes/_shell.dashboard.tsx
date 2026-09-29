@@ -70,6 +70,11 @@ function DashboardPage() {
   );
   const t = totals(scoped);
   const p = totals(previous);
+  // Outstanding balances are cumulative, not period-bound.
+  const outstanding = useMemo(
+    () => totals(scopeTransactions(data, { period: "all", farmId: farmScope, now })),
+    [data, farmScope, now],
+  );
 
   const series = useMemo(() => monthlySeries(data, farmScope, now), [data, farmScope, now]);
   const farmSeries = useMemo(() => byFarm(data, scoped), [data, scoped]);
