@@ -10,33 +10,59 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as ShellDashboardRouteImport } from './routes/_shell.dashboard'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShellRoute = ShellRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellDashboardRoute = ShellDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ShellRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/dashboard': typeof ShellDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/dashboard': typeof ShellDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_shell': typeof ShellRouteWithChildren
+  '/connexion': typeof ConnexionRoute
+  '/_shell/dashboard': typeof ShellDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/connexion' | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/connexion' | '/dashboard'
+  id: '__root__' | '/' | '/_shell' | '/connexion' | '/_shell/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ShellRoute: typeof ShellRouteWithChildren
+  ConnexionRoute: typeof ConnexionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +74,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/dashboard': {
+      id: '/_shell/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ShellDashboardRouteImport
+      parentRoute: typeof ShellRoute
+    }
   }
 }
 
+interface ShellRouteChildren {
+  ShellDashboardRoute: typeof ShellDashboardRoute
+}
+
+const ShellRouteChildren: ShellRouteChildren = {
+  ShellDashboardRoute: ShellDashboardRoute,
+}
+
+const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ShellRoute: ShellRouteWithChildren,
+  ConnexionRoute: ConnexionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
