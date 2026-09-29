@@ -39,17 +39,13 @@ export const Route = createFileRoute("/_shell/parametres")({
   component: SettingsPage,
 });
 
-const NOTIF_LABELS: { key: keyof ReturnType<typeof notifKeys>; label: string; detail: string }[] = [];
-function notifKeys() {
-  return {
-    supplierDebt: true,
-    missingDocuments: true,
-    budgetAlerts: true,
-    workerAdvances: true,
-    internalFlows: true,
-    weeklyDigest: true,
-  };
-}
+type NotifKey =
+  | "supplierDebt"
+  | "missingDocuments"
+  | "budgetAlerts"
+  | "workerAdvances"
+  | "internalFlows"
+  | "weeklyDigest";
 
 const NOTIFS: { key: keyof ReturnType<typeof notifKeys>; label: string; detail: string }[] = [
   { key: "supplierDebt", label: "Dettes fournisseurs", detail: "Alerte quand une facture reste impayée" },
