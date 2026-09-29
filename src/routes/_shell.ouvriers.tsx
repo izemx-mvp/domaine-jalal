@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { HandCoins, HardHat, MoreHorizontal, Plus, Search, Wallet } from "lucide-react";
+import { HandCoins, HardHat, Wand2, MoreHorizontal, Plus, Search, Wallet } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -13,6 +13,7 @@ import {
   StatusBadge,
 } from "@/components/common/ui-bits";
 import { TransactionDialog } from "@/components/transactions/transaction-dialog";
+import { AssignDialog, AvailabilityBadge, ReplacementDialog, WorkerSkillsPanel } from "@/components/workers/worker-skills";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -80,6 +81,8 @@ function WorkersPage() {
   const [statusFilter, setStatusFilter] = useState(ALL);
   const [note, setNote] = useState("");
   const [advanceFor, setAdvanceFor] = useState<Worker | null>(null);
+  const [replaceOpen, setReplaceOpen] = useState(false);
+  const [assignFor, setAssignFor] = useState<Worker | null>(null);
 
   const rows = useMemo(
     () =>
@@ -129,6 +132,10 @@ function WorkersPage() {
         title="Équipes du domaine"
         description="Avances, paiements et soldes par ouvrier."
         action={
+          <div className="flex flex-wrap gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => setReplaceOpen(true)}>
+            <Wand2 className="h-4 w-4" /> Trouver un remplaçant
+          </Button>
           <Button
             className="gap-2"
             onClick={() => {
@@ -138,6 +145,7 @@ function WorkersPage() {
           >
             <Plus className="h-4 w-4" /> Nouvel ouvrier
           </Button>
+          </div>
         }
       />
 
@@ -228,7 +236,8 @@ function WorkersPage() {
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">{farmName(data, worker.farmId)}</td>
                       <td className="px-4 py-3">
-                        <div>{worker.role}</div>
+                        <div className="flex items-center gap-2">{worker.role} <AvailabilityBadge value={worker.availability} /></div>
+                        <div className="text-xs text-muted-foreground">{(worker.skills ?? []).map((s) => s.name).slice(0, 3).join(" · ")}</div>
                         <div className="num text-xs text-muted-foreground">
                           {formatMAD(worker.compensation)} / {worker.compensationUnit}
                         </div>
@@ -256,6 +265,9 @@ function WorkersPage() {
                             <DropdownMenuItem onClick={() => setDetail(worker)}>Voir la fiche</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => setAdvanceFor(worker)}>
                               Enregistrer une avance
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setAssignFor(worker)}>
+                              Affecter temporairement
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
@@ -322,6 +334,13 @@ function WorkersPage() {
         }
       />
 
+      <ReplacementDialog open={replaceOpen} onOpenChange={setReplaceOpen} />
+      <AssignDialog
+        worker={assignFor ? data.workers.find((w) => w.id === assignFor.id) ?? assignFor : null}
+        open={!!assignFor}
+        onOpenChange={(v) => !v && setAssignFor(null)}
+      />
+
       <Sheet open={!!detail} onOpenChange={(v) => !v && setDetail(null)}>
         <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-[500px]">
           {liveDetail && detailStats ? (
@@ -368,6 +387,8 @@ function WorkersPage() {
                 <Button className="w-full gap-2" onClick={() => setAdvanceFor(liveDetail)}>
                   <HandCoins className="h-4 w-4" /> Enregistrer une avance
                 </Button>
+
+                <WorkerSkillsPanel worker={liveDetail} onAssign={() => setAssignFor(liveDetail)} />
 
                 <section>
                   <h3 className="font-display text-sm font-semibold">Historique</h3>

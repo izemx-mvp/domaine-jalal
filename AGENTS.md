@@ -15,3 +15,4 @@
 - Derived numbers (totals, statuses, per-entity stats, chart series) belong in `src/data/selectors.ts`, never inline in routes, so figures stay consistent across pages.
 - App pages are children of the pathless `src/routes/_shell.tsx` layout, which owns navigation, page title and the global farm/period filters.
 - `tsconfig.json` keeps `strict` but disables `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature`: the large generated demo dataset makes those flags pure noise here.
+- New data slices (worker skills, `vetEvents`) are seeded in `src/data/seed-extras.ts`, whose `upgradeData()` backfills older localStorage saves — so existing demo sessions gain new features without a reset.

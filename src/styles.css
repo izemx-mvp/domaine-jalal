@@ -265,3 +265,41 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- Floating assistant ---------- */
+.assistant-fab {
+  background: radial-gradient(circle at 30% 25%, color-mix(in oklab, var(--color-primary) 85%, var(--color-wheat)), var(--color-canopy) 70%);
+  box-shadow: 0 10px 30px -8px color-mix(in oklab, var(--color-canopy) 70%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--color-cream) 25%, transparent);
+}
+.assistant-pulse {
+  border: 2px solid color-mix(in oklab, var(--color-wheat) 60%, transparent);
+  animation: assistant-pulse 2.8s ease-out infinite;
+}
+@keyframes assistant-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* ---------- Wheat field background ---------- */
+.wheat-sway-far { animation: wheat-sway 22s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+.wheat-sway-mid { animation: wheat-sway 15s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+.wheat-sway-near { animation: wheat-sway-near 11s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes wheat-sway {
+  0% { transform: translateX(14px) skewX(-2deg); }
+  100% { transform: translateX(-14px) skewX(2deg); }
+}
+@keyframes wheat-sway-near {
+  0% { transform: translateX(10px) skewX(-4deg); }
+  100% { transform: translateX(-10px) skewX(4deg); }
+}
+.wheat-dust { animation: wheat-dust 18s ease-in-out infinite; }
+@keyframes wheat-dust {
+  0%, 100% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { transform: translate(-30px, -40px); opacity: 0.6; }
+  80% { opacity: 0.2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wheat-sway-far, .wheat-sway-mid, .wheat-sway-near, .wheat-dust, .assistant-pulse { animation: none; }
+}

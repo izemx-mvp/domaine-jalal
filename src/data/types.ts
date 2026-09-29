@@ -47,6 +47,50 @@ export interface Supplier {
   notes: Note[];
 }
 
+export type SkillName =
+  | "Irrigation"
+  | "Récolte"
+  | "Conduite de machines"
+  | "Maintenance"
+  | "Traitement agricole"
+  | "Stockage"
+  | "Alimentation du bétail"
+  | "Surveillance élevage"
+  | "Manutention";
+
+export const SKILLS: SkillName[] = [
+  "Irrigation",
+  "Récolte",
+  "Conduite de machines",
+  "Maintenance",
+  "Traitement agricole",
+  "Stockage",
+  "Alimentation du bétail",
+  "Surveillance élevage",
+  "Manutention",
+];
+
+export interface WorkerSkill {
+  name: SkillName;
+  /** 1 = débutant … 5 = expert */
+  level: number;
+  years: number;
+}
+
+export type Availability = "Disponible" | "Occupé" | "En congé" | "Affecté temporairement";
+
+export interface Assignment {
+  id: string;
+  farmId: string;
+  task: string;
+  skill: SkillName | null;
+  startDate: string;
+  endDate: string;
+  kind: "Permanente" | "Temporaire";
+  replacing?: string;
+  note?: string;
+}
+
 export interface Worker {
   id: string;
   name: string;
@@ -57,6 +101,45 @@ export interface Worker {
   compensationUnit: "jour" | "mois";
   status: "Actif" | "Saisonnier" | "Inactif";
   notes: Note[];
+  skills?: WorkerSkill[];
+  availability?: Availability;
+  assignments?: Assignment[];
+}
+
+export type VetEventType =
+  | "Visite vétérinaire"
+  | "Vaccination"
+  | "Contrôle"
+  | "Traitement"
+  | "Suivi"
+  | "Renouvellement médicament";
+
+export const VET_TYPES: VetEventType[] = [
+  "Visite vétérinaire",
+  "Vaccination",
+  "Contrôle",
+  "Traitement",
+  "Suivi",
+  "Renouvellement médicament",
+];
+
+export interface VetEvent {
+  id: string;
+  date: string; // YYYY-MM-DD
+  time: string; // HH:MM
+  vet: string;
+  lot: string;
+  type: VetEventType;
+  reason: string;
+  observations: string;
+  treatment: string;
+  medications: string;
+  nextAction: string;
+  nextControl: string | null;
+  status: "Planifié" | "En cours" | "Terminé";
+  cost: number;
+  transactionId: string | null;
+  documentId: string | null;
 }
 
 export interface Client {
@@ -122,7 +205,7 @@ export interface Flow {
 export interface DocumentItem {
   id: string;
   name: string;
-  category: "Factures" | "Reçus" | "Tickets" | "Photos" | "Justificatifs" | "Documents fournisseurs";
+  category: "Factures" | "Reçus" | "Tickets" | "Photos" | "Justificatifs" | "Documents fournisseurs" | "Vétérinaire";
   farmId: string;
   entity: string;
   transactionRef: string | null;
@@ -181,6 +264,7 @@ export interface AppData {
   documents: DocumentItem[];
   notifications: NotificationItem[];
   activity: ActivityItem[];
+  vetEvents: VetEvent[];
   settings: AppSettings;
 }
 
