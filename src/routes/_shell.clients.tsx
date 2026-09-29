@@ -269,7 +269,11 @@ function ClientsPage() {
       <TransactionDialog
         open={!!collectFor}
         onOpenChange={(v) => !v && setCollectFor(null)}
-        defaults={{ type: "Encaissement", category: "Récolte" }}
+        defaults={
+          collectFor
+            ? { type: "Encaissement", category: "Récolte", partyId: collectFor.id }
+            : { type: "Encaissement", category: "Récolte" }
+        }
       />
 
       <Sheet open={!!detail} onOpenChange={(v) => !v && setDetail(null)}>

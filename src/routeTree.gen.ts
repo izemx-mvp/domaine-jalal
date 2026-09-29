@@ -19,6 +19,8 @@ import { Route as ShellFinanceRouteImport } from './routes/_shell.finance'
 import { Route as ShellFluxInternesRouteImport } from './routes/_shell.flux-internes'
 import { Route as ShellFournisseursRouteImport } from './routes/_shell.fournisseurs'
 import { Route as ShellOuvriersRouteImport } from './routes/_shell.ouvriers'
+import { Route as ShellParametresRouteImport } from './routes/_shell.parametres'
+import { Route as ShellRapportsRouteImport } from './routes/_shell.rapports'
 import { Route as ShellTransactionsRouteImport } from './routes/_shell.transactions'
 import { Route as ShellExploitationsIndexRouteImport } from './routes/_shell.exploitations.index'
 import { Route as ShellExploitationsSlugRouteImport } from './routes/_shell.exploitations.$slug'
@@ -72,6 +74,16 @@ const ShellOuvriersRoute = ShellOuvriersRouteImport.update({
   path: '/ouvriers',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellParametresRoute = ShellParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellRapportsRoute = ShellRapportsRouteImport.update({
+  id: '/rapports',
+  path: '/rapports',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellTransactionsRoute = ShellTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
@@ -98,6 +110,8 @@ export interface FileRoutesByFullPath {
   '/flux-internes': typeof ShellFluxInternesRoute
   '/fournisseurs': typeof ShellFournisseursRoute
   '/ouvriers': typeof ShellOuvriersRoute
+  '/parametres': typeof ShellParametresRoute
+  '/rapports': typeof ShellRapportsRoute
   '/transactions': typeof ShellTransactionsRoute
   '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations/': typeof ShellExploitationsIndexRoute
@@ -112,6 +126,8 @@ export interface FileRoutesByTo {
   '/flux-internes': typeof ShellFluxInternesRoute
   '/fournisseurs': typeof ShellFournisseursRoute
   '/ouvriers': typeof ShellOuvriersRoute
+  '/parametres': typeof ShellParametresRoute
+  '/rapports': typeof ShellRapportsRoute
   '/transactions': typeof ShellTransactionsRoute
   '/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/exploitations': typeof ShellExploitationsIndexRoute
@@ -128,6 +144,8 @@ export interface FileRoutesById {
   '/_shell/flux-internes': typeof ShellFluxInternesRoute
   '/_shell/fournisseurs': typeof ShellFournisseursRoute
   '/_shell/ouvriers': typeof ShellOuvriersRoute
+  '/_shell/parametres': typeof ShellParametresRoute
+  '/_shell/rapports': typeof ShellRapportsRoute
   '/_shell/transactions': typeof ShellTransactionsRoute
   '/_shell/exploitations/$slug': typeof ShellExploitationsSlugRoute
   '/_shell/exploitations/': typeof ShellExploitationsIndexRoute
@@ -144,6 +162,8 @@ export interface FileRouteTypes {
     | '/flux-internes'
     | '/fournisseurs'
     | '/ouvriers'
+    | '/parametres'
+    | '/rapports'
     | '/transactions'
     | '/exploitations/$slug'
     | '/exploitations/'
@@ -158,6 +178,8 @@ export interface FileRouteTypes {
     | '/flux-internes'
     | '/fournisseurs'
     | '/ouvriers'
+    | '/parametres'
+    | '/rapports'
     | '/transactions'
     | '/exploitations/$slug'
     | '/exploitations'
@@ -173,6 +195,8 @@ export interface FileRouteTypes {
     | '/_shell/flux-internes'
     | '/_shell/fournisseurs'
     | '/_shell/ouvriers'
+    | '/_shell/parametres'
+    | '/_shell/rapports'
     | '/_shell/transactions'
     | '/_shell/exploitations/$slug'
     | '/_shell/exploitations/'
@@ -256,6 +280,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellOuvriersRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/parametres': {
+      id: '/_shell/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ShellParametresRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/rapports': {
+      id: '/_shell/rapports'
+      path: '/rapports'
+      fullPath: '/rapports'
+      preLoaderRoute: typeof ShellRapportsRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/transactions': {
       id: '/_shell/transactions'
       path: '/transactions'
@@ -288,6 +326,8 @@ interface ShellRouteChildren {
   ShellFluxInternesRoute: typeof ShellFluxInternesRoute
   ShellFournisseursRoute: typeof ShellFournisseursRoute
   ShellOuvriersRoute: typeof ShellOuvriersRoute
+  ShellParametresRoute: typeof ShellParametresRoute
+  ShellRapportsRoute: typeof ShellRapportsRoute
   ShellTransactionsRoute: typeof ShellTransactionsRoute
   ShellExploitationsSlugRoute: typeof ShellExploitationsSlugRoute
   ShellExploitationsIndexRoute: typeof ShellExploitationsIndexRoute
@@ -301,6 +341,8 @@ const ShellRouteChildren: ShellRouteChildren = {
   ShellFluxInternesRoute: ShellFluxInternesRoute,
   ShellFournisseursRoute: ShellFournisseursRoute,
   ShellOuvriersRoute: ShellOuvriersRoute,
+  ShellParametresRoute: ShellParametresRoute,
+  ShellRapportsRoute: ShellRapportsRoute,
   ShellTransactionsRoute: ShellTransactionsRoute,
   ShellExploitationsSlugRoute: ShellExploitationsSlugRoute,
   ShellExploitationsIndexRoute: ShellExploitationsIndexRoute,

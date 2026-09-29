@@ -84,7 +84,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [authed, setAuthed] = useState(false);
   const [farmScope, setFarmScope] = useState<string | "all">("all");
-  const [period, setPeriod] = useState<Period>("30d");
+  const [period, setPeriod] = useState<Period>("year");
 
   useEffect(() => {
     try {

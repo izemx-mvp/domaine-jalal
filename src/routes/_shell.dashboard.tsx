@@ -70,6 +70,11 @@ function DashboardPage() {
   );
   const t = totals(scoped);
   const p = totals(previous);
+  // Outstanding balances are cumulative, not period-bound.
+  const outstanding = useMemo(
+    () => totals(scopeTransactions(data, { period: "all", farmId: farmScope, now })),
+    [data, farmScope, now],
+  );
 
   const series = useMemo(() => monthlySeries(data, farmScope, now), [data, farmScope, now]);
   const farmSeries = useMemo(() => byFarm(data, scoped), [data, scoped]);
@@ -132,11 +137,11 @@ function DashboardPage() {
         />
         <KpiCard
           label="Dettes fournisseurs"
-          value={t.supplierDebt}
+          value={outstanding.supplierDebt}
           icon={Wallet}
           tone="warning"
-          comparison="Montants restant à régler"
-          tooltip="Somme des restes à payer sur les factures fournisseurs."
+          comparison="Encours total à régler"
+          tooltip="Somme des restes à payer sur les factures fournisseurs, toutes périodes confondues."
         />
         <KpiCard
           label="Encaissements clients"
@@ -154,10 +159,10 @@ function DashboardPage() {
         />
         <KpiCard
           label="Reste à payer"
-          value={t.toPay}
+          value={outstanding.toPay}
           icon={AlertTriangle}
           tone="critical"
-          comparison="Toutes exploitations confondues"
+          comparison="Encours global, toutes périodes"
         />
         <KpiCard
           label="Transactions"
